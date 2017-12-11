@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  db_cacti:
+   image: mariadb 
+   volumes:
+    - docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+   ports:
+    - "3306:3306"
+   environment:
+    MYSQL_ROOT_PASSWORD: Bonjour
+    MYSQL_DATABASE: cacti
+    MYSQL_USER: cacti
+    MYSQL_PASSWORD: cacti
+
+  docker-cacti:
+   depends_on:
+    - db_cacti
+   image: docker-cacti
+   ports:
+    - "80:80"
+    - "443:443"
+volumes:
+ docker-entrypoint-initdb.d:
+  driver: local-persist
+  driver_opts:
+   mountpoint: docker-entrypoint-initdb.d
